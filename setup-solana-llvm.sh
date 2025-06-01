@@ -5,9 +5,8 @@ set -euo pipefail
 output_dir="${1:-solana-llvm}"
 
 output_dir=$(pwd)/solana-llvm
-llvm_dir=$output_dir/llvm
 
-if [[ -L $llvm_dir || -d $llvm_dir ]]; then
+if [[ -L "$output_dir/llvm" || -d "$output_dir/llvm" ]]; then
   echo "✅ Solana platform tools already present in directory"
   exit 0
 fi
@@ -26,13 +25,13 @@ if [[ ! -f "$config_path" ]]; then
 fi
 
 active_release_dir=$(grep '^active_release_dir:' $config_path | sed 's/^active_release_dir:[[:space:]]*//')
-local_llvm_dir=$active_release_dir/bin/platform-tools-sdk/sbf/dependencies/platform-tools/llvm
+local_llvm_dir=$active_release_dir/bin/sdk/sbf/dependencies/platform-tools/llvm
 
-mkdir -p $llvm_dir
+mkdir -p $output_dir
 
 if [[ -d $local_llvm_dir ]]; then
-  ln -s $local_llvm_dir $llvm_dir
-  echo "✅ Solana platform tools already installed. Symlink created."
+  ln -s $local_llvm_dir $output_dir
+  echo "✅ Solana platform tools available. Symlink created."
   exit 0
 fi
 
